@@ -29,6 +29,8 @@ public class MouseCatch : MonoBehaviour {
         initial.GetComponent<Vertex>().addNeighbor(final);
     }
 
+
+
 	// Use this for initialization
 	void Start () {
 

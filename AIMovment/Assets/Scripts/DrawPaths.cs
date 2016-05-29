@@ -11,26 +11,17 @@ public class DrawPaths: MonoBehaviour {
     public Vector3 final;
     public Vector3[] vectors;
 
-    // Use this for initialization
     void Start () {
 
-        /*initial = GameObject.Find("Square 1").transform.position;
-        final = GameObject.Find("Square 2").transform.position;
-
-        vectors = new Vector3[2];
-        vectors[0] = initial;
-        vectors[1] = final;
-
-        linerenderer = gameObject.AddComponent<LineRenderer>();
-        linerenderer.SetVertexCount(2);
-        linerenderer.SetPositions(vectors);*/
     }
 
 
     // Update is called once per frame
-    void Update () {
+    void Update ()
+    {
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            deleteLines();
             objs = GameObject.FindGameObjectsWithTag("Vertex");
 
             foreach (GameObject obj in objs)
@@ -38,6 +29,7 @@ public class DrawPaths: MonoBehaviour {
                 foreach(GameObject obj2 in obj.GetComponent<Vertex>().neighbors)
                 {
                     GameObject lineobj = new GameObject("Linha massa :B");
+                    lineobj.tag = "Line";
                     lineobj.AddComponent<LineRenderer>();
                     LineRenderer line = lineobj.GetComponent<LineRenderer>();
                     Material mat = Resources.Load("Arrow", typeof(Material)) as Material;
@@ -50,6 +42,16 @@ public class DrawPaths: MonoBehaviour {
                     line.SetPosition(1, obj2.transform.position);
                 }
             }
+        }
+    }
+
+    public void deleteLines()
+    {
+        GameObject[] lines = GameObject.FindGameObjectsWithTag("Line");
+
+        foreach(GameObject l in lines)
+        {
+            Destroy(l);
         }
     }
 }

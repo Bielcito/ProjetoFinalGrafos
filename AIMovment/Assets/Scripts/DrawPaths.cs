@@ -11,6 +11,12 @@ public class DrawPaths: MonoBehaviour {
     public Vector3 final;
     public Vector3[] vectors;
 
+    struct neighbor
+    {
+        public GameObject obj;
+        public int valor;
+    }
+
     void Start () {
 
     }
@@ -19,30 +25,6 @@ public class DrawPaths: MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            deleteLines();
-            objs = GameObject.FindGameObjectsWithTag("Vertex");
-
-            foreach (GameObject obj in objs)
-            {
-                foreach(GameObject obj2 in obj.GetComponent<Vertex>().neighbors)
-                {
-                    GameObject lineobj = new GameObject("Linha massa :B");
-                    lineobj.tag = "Line";
-                    lineobj.AddComponent<LineRenderer>();
-                    LineRenderer line = lineobj.GetComponent<LineRenderer>();
-                    Material mat = Resources.Load("Arrow", typeof(Material)) as Material;
-
-                    line.GetComponent<Renderer>().material = mat;
-                    line.GetComponent<Renderer>().transform.Rotate(Vector3.right * Time.deltaTime * 60);
-                    line.SetWidth(0.5f, 0.5f);
-                    line.SetVertexCount(2);
-                    line.SetPosition(0, obj.transform.position);
-                    line.SetPosition(1, obj2.transform.position);
-                }
-            }
-        }
     }
 
     public void deleteLines()
@@ -52,6 +34,31 @@ public class DrawPaths: MonoBehaviour {
         foreach(GameObject l in lines)
         {
             Destroy(l);
+        }
+    }
+
+    public void drawLines()
+    {
+        deleteLines();
+        objs = GameObject.FindGameObjectsWithTag("Vertex");
+
+        foreach (GameObject obj in objs)
+        {
+            foreach (Vertex.neighbor obj2 in obj.GetComponent<Vertex>().neighbors)
+            {
+                GameObject lineobj = new GameObject("Linha massa :B");
+                lineobj.tag = "Line";
+                lineobj.AddComponent<LineRenderer>();
+                LineRenderer line = lineobj.GetComponent<LineRenderer>();
+                Material mat = Resources.Load("Arrow", typeof(Material)) as Material;
+
+                line.GetComponent<Renderer>().material = mat;
+                line.GetComponent<Renderer>().transform.Rotate(Vector3.right * Time.deltaTime * 60);
+                line.SetWidth(0.5f, 0.5f);
+                line.SetVertexCount(2);
+                line.SetPosition(0, obj.transform.position);
+                line.SetPosition(1, obj2.obj.transform.position);
+            }
         }
     }
 }

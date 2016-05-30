@@ -4,6 +4,15 @@ using System.Collections;
 public class Vertex : MonoBehaviour {
 
     public Vector3 position;
+
+    //Um dos Vizinhos de mim:
+    public struct neighbor
+    {
+        public GameObject obj;
+        public int valor; //distância desse vértice para o vértice obj.
+    }
+
+    //Lista dos meus vizinhos
     public ArrayList neighbors;
     public GameObject PathCreator;
 
@@ -34,16 +43,26 @@ public class Vertex : MonoBehaviour {
         }
     }
 
-    public void addNeighbor(GameObject obj)
+    public void addNeighbor(GameObject obj, int valor)
     {
-        if (neighbors.Contains(obj))
+        neighbor aux;
+
+        aux.obj = obj;
+        aux.valor = valor;
+
+        bool tem = false;
+
+        foreach(neighbor x in neighbors)
         {
-            print("Objeto já existe aqui! :(");
+            if (x.obj == aux.obj)
+            {
+                tem = true;
+            }
         }
-        else
+
+        if(tem == false)
         {
-            neighbors.Add(obj);
-            print("Objeto " + obj.name + " Adicionado.");
+            neighbors.Add(aux);
         }
     }
 }

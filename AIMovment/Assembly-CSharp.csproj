@@ -45,9 +45,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\DecisionTree.cs" />
      <Compile Include="Assets\Scripts\Dijkstra.cs" />
      <Compile Include="Assets\Scripts\DrawPaths.cs" />
      <Compile Include="Assets\Scripts\MouseCatch.cs" />
+     <Compile Include="Assets\Scripts\PlayerStatus.cs" />
      <Compile Include="Assets\Scripts\Vertex.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

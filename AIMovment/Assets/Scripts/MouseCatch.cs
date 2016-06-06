@@ -5,6 +5,7 @@ using System.Collections;
 public class MouseCatch : MonoBehaviour {
 
     public bool started = false;
+    public bool writing = false;
     public GameObject initial;
     public GameObject final;
     public GameObject input;
@@ -26,10 +27,11 @@ public class MouseCatch : MonoBehaviour {
 
     public void showinput()
     {
+        writing = true;
         GameObject aux = Resources.Load("Input", typeof(GameObject)) as GameObject;
         input = GameObject.Instantiate(aux);
 
-        input.transform.SetParent(GameObject.Find("Canvas").transform);
+        input.transform.SetParent(GameObject.Find("Buttons").transform);
         input.transform.localScale = new Vector3(1, 1, 1);
         input.transform.localPosition = new Vector3(0, 0, 0);
     }
@@ -58,6 +60,7 @@ public class MouseCatch : MonoBehaviour {
                 string textvalor = input.GetComponent<InputField>().text;
                 createPath(int.Parse(textvalor));
                 Destroy(input);
+                writing = false;
             }
         }
     }

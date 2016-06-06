@@ -4,6 +4,8 @@ using System.Collections;
 public class Vertex : MonoBehaviour {
 
     public Vector3 position;
+    public bool monster;
+    public bool coin;
 
     //Um dos Vizinhos de mim:
     public struct neighbor
@@ -29,6 +31,10 @@ public class Vertex : MonoBehaviour {
 
     public void OnMouseDown()
     {
+        if(PathCreator.GetComponent<MouseCatch>().writing == true)
+        {
+            return;
+        }
         if(PathCreator.GetComponent<Dijkstra>().isButtonInitialPressed != true && PathCreator.GetComponent<Dijkstra>().isButtonFinalPressed != true)
         {
             PathCreator.GetComponent<MouseCatch>().PassObject(gameObject);

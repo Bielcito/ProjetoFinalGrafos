@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class Dijkstra : MonoBehaviour {
 
     public GameObject initialVertex = null;
     public GameObject finalVertex = null;
+    public GameObject textobj;
     public bool isButtonInitialPressed;
     public bool isButtonFinalPressed;
     public struct dist
@@ -20,7 +22,7 @@ public class Dijkstra : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-}
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -30,13 +32,24 @@ public class Dijkstra : MonoBehaviour {
 
     public void selectInitialVertex(GameObject obj)
     {
+        if(initialVertex)
+        {
+            initialVertex.GetComponent<SpriteRenderer>().color = Color.white;
+        }
         initialVertex = obj;
+        initialVertex.GetComponent<SpriteRenderer>().color = Color.green;
+
         isButtonInitialPressed = false;
     }
 
     public void selectFinalVertex(GameObject obj)
     {
+        if(finalVertex)
+        {
+            finalVertex.GetComponent<SpriteRenderer>().color = Color.white;
+        }
         finalVertex = obj;
+        finalVertex.GetComponent<SpriteRenderer>().color = Color.red;
         isButtonFinalPressed = false;
     }
 
@@ -52,10 +65,39 @@ public class Dijkstra : MonoBehaviour {
 
     public void printDijkstraPath()
     {
+        if(initialVertex == null || finalVertex == null)
+        {
+            if(textobj)
+            {
+                return;
+            }
+            GameObject aux = Resources.Load("Text", typeof(GameObject)) as GameObject;
+            textobj = GameObject.Instantiate(aux);
+            textobj.name = "EHA!";
+            textobj.transform.SetParent(GameObject.Find("Players").transform);
+            textobj.transform.localScale = new Vector3(1, 1, 1);
+            textobj.GetComponent<Text>().text = "É preciso especificar o vértice inicial e o final antes!";
+            textobj.GetComponent<Text>().color = Color.red;
+            textobj.GetComponent<Text>().fontStyle = FontStyle.Bold;
+            textobj.GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Overflow;
+            Vector3 v = textobj.transform.localPosition;
+            v.Set(197, 148, 0);
+            textobj.transform.localPosition = v;
+            StartCoroutine(Tempo(textobj));
+            return;
+        }
+        string frase = "";
         foreach(GameObject x in executeDijkstra())
         {
-            print(x);
+            frase += x.name + " ";
         }
+        print(frase);
+    }
+
+    IEnumerator Tempo(GameObject obj)
+    {
+        yield return new WaitForSeconds(3);
+        Destroy(obj);
     }
 
     public List<GameObject> executeDijkstra()

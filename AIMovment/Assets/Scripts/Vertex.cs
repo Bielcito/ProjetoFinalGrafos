@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Vertex : MonoBehaviour {
@@ -6,6 +7,7 @@ public class Vertex : MonoBehaviour {
     public Vector3 position;
     public bool monster;
     public bool coin;
+    public GameObject textobj;
 
     //Um dos Vizinhos de mim:
     public struct neighbor
@@ -22,11 +24,35 @@ public class Vertex : MonoBehaviour {
     void Start () {
         PathCreator = GameObject.Find("PathCreator");
         neighbors = new ArrayList();
+        printIndexes();
+        refreshValorPosition();
     }
 	
 	// Update is called once per frame
 	void Update () {
         position = gameObject.transform.position;
+    }
+
+    void printIndexes()
+    {
+        GameObject aux = Resources.Load("Text", typeof(GameObject)) as GameObject;
+        textobj = GameObject.Instantiate(aux);
+        textobj.transform.SetParent(GameObject.Find("Buttons").transform);
+        textobj.transform.localScale = new Vector3(1, 1, 1);
+        textobj.GetComponent<Text>().text = name;
+        textobj.GetComponent<Text>().color = Color.black;
+        textobj.GetComponent<Text>().fontStyle = FontStyle.Bold;
+    }
+
+    public void refreshValorPosition()
+    {
+        Vector3 v = gameObject.transform.position;
+        v.Set(v.x, v.y - gameObject.GetComponent<CircleCollider2D>().radius - 0.1f, v.z);
+        if(textobj)
+        {
+            textobj.transform.position = v;
+            Invoke("refreshValorPosition", 1);
+        }
     }
 
     public void OnMouseDown()

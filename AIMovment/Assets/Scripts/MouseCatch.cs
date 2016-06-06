@@ -4,6 +4,8 @@ using System.Collections;
 
 public class MouseCatch : MonoBehaviour {
 
+    public InputField.SubmitEvent submitEvent = new InputField.SubmitEvent();
+
     public bool started = false;
     public bool writing = false;
     public GameObject initial;
@@ -34,11 +36,11 @@ public class MouseCatch : MonoBehaviour {
         input.transform.SetParent(GameObject.Find("Buttons").transform);
         input.transform.localScale = new Vector3(1, 1, 1);
         input.transform.localPosition = new Vector3(0, 0, 0);
+        input.GetComponent<InputField>().onEndEdit = submitEvent;
     }
 
     public void createPath(int valor)
     {
-        print(valor);
         initial.GetComponent<Vertex>().addNeighbor(final, valor);
         gameObject.GetComponent<DrawPaths>().drawLines();
     }
@@ -47,20 +49,23 @@ public class MouseCatch : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        submitEvent.AddListener(SubmitName);
+    }
 
+    void SubmitName(string name)
+    {
+        createPath(int.Parse(name));
+        writing = false;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if(Input.GetKeyDown(KeyCode.Tab))
+        if(input)
         {
-            if (input.GetComponent<InputField>().isFocused == true)
+            if(Input.GetKeyDown(KeyCode.Return))
             {
-                string textvalor = input.GetComponent<InputField>().text;
-                createPath(int.Parse(textvalor));
                 Destroy(input);
-                writing = false;
             }
         }
     }

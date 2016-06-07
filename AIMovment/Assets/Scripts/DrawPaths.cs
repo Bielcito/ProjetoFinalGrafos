@@ -61,9 +61,6 @@ public class DrawPaths: MonoBehaviour {
         textobj.GetComponent<Text>().color = Color.blue;
         textobj.GetComponent<Text>().fontStyle = FontStyle.Bold;
         textobj.transform.position = b - result;
-        Vector3 vetor = textobj.transform.localPosition;
-        vetor.x = vetor.x - 13;
-        textobj.transform.localPosition = vetor;
     }
 
     public void drawLines()
@@ -83,7 +80,6 @@ public class DrawPaths: MonoBehaviour {
                 Material mat = Resources.Load("Arrow", typeof(Material)) as Material;
 
                 line.GetComponent<Renderer>().material = mat;
-                line.GetComponent<Renderer>().transform.Rotate(Vector3.right * Time.deltaTime * 60);
                 line.SetWidth(0.5f, 0.5f);
                 line.SetVertexCount(2);
                 line.SetPosition(0, obj.transform.position);

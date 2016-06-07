@@ -37,10 +37,11 @@ public class Vertex : MonoBehaviour {
     {
         GameObject aux = Resources.Load("Text", typeof(GameObject)) as GameObject;
         textobj = GameObject.Instantiate(aux);
+        textobj.tag = "Name";
         textobj.transform.SetParent(GameObject.Find("Buttons").transform);
         textobj.transform.localScale = new Vector3(1, 1, 1);
         textobj.GetComponent<Text>().text = name;
-        textobj.GetComponent<Text>().color = Color.black;
+        textobj.GetComponent<Text>().color = Color.magenta;
         textobj.GetComponent<Text>().fontStyle = FontStyle.Bold;
     }
 

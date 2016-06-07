@@ -8,8 +8,9 @@ public class Dijkstra : MonoBehaviour {
     public GameObject initialVertex = null;
     public GameObject finalVertex = null;
     public GameObject textobj;
-    public bool isButtonInitialPressed;
-    public bool isButtonFinalPressed;
+    public bool isButtonInitialPressed = false;
+    public bool isButtonFinalPressed = false;
+    public bool isDijkstraAlreadyInitialized = false;
     public struct dist
     {
         public GameObject obj;
@@ -19,9 +20,10 @@ public class Dijkstra : MonoBehaviour {
     }
 
     public List<dist> Q;
+    int index = 0;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
     }
 	
 	// Update is called once per frame
@@ -63,14 +65,15 @@ public class Dijkstra : MonoBehaviour {
         isButtonFinalPressed = true;
     }
 
-    public void printDijkstraPath()
+    public bool isInitialAndFinalVertexesAlreadySet()
     {
-        if(initialVertex == null || finalVertex == null)
+        if (initialVertex == null || finalVertex == null)
         {
-            if(textobj)
+            if (textobj)
             {
-                return;
+                return false;
             }
+
             GameObject aux = Resources.Load("Text", typeof(GameObject)) as GameObject;
             textobj = GameObject.Instantiate(aux);
             textobj.name = "EHA!";
@@ -84,14 +87,42 @@ public class Dijkstra : MonoBehaviour {
             v.Set(197, 148, 0);
             textobj.transform.localPosition = v;
             StartCoroutine(Tempo(textobj));
-            return;
+            return false;
         }
-        string frase = "";
-        foreach(GameObject x in executeDijkstra())
+        else
         {
-            frase += x.name + " ";
+            return true;
         }
-        print(frase);
+    }
+
+    public void printDijkstraPath()
+    {
+        if(!isDijkstraAlreadyInitialized)
+        {
+            if (!isInitialAndFinalVertexesAlreadySet())
+            {
+                return;
+            }
+
+            if (!dijkstraInitialization())
+            {
+                return;
+            }
+
+            isDijkstraAlreadyInitialized = true;
+        }
+
+        string frase = "";
+
+        List<GameObject> path = doADijkstraLoop();
+        if (path != null)
+        {
+            foreach (GameObject x in path)
+            {
+                frase += x.name + " ";
+            }
+            print(frase);
+        }
     }
 
     IEnumerator Tempo(GameObject obj)
@@ -100,14 +131,14 @@ public class Dijkstra : MonoBehaviour {
         Destroy(obj);
     }
 
-    public List<GameObject> executeDijkstra()
+    public bool dijkstraInitialization()
     {
         Q = new List<dist>();
 
         if (initialVertex == null || finalVertex == null)
         {
 
-            return null;
+            return false;
         }
 
 
@@ -130,11 +161,13 @@ public class Dijkstra : MonoBehaviour {
         aux2 = Q[i];
         aux2.valor = 0;
         Q[i] = aux2;
-        int index = 0;
 
-        //Até aqui é certeza de que tá pegando.
+        return true;
+    }
 
-        while (Q.FindAll(p => p.isRemoved).Count != Q.Count)
+    public List<GameObject> doADijkstraLoop()
+    {
+        if (Q.FindAll(p => p.isRemoved).Count != Q.Count)
         {
             //Pega o vértice com a menor distância em Q:
             dist min = new dist();
@@ -156,6 +189,7 @@ public class Dijkstra : MonoBehaviour {
             dist asd = Q[pos];
             asd.isRemoved = true;
 
+            //Se for o finalVertex:
             if(pivo.obj == finalVertex)
             {
                 //Retorna o caminho de vertices:
@@ -179,10 +213,13 @@ public class Dijkstra : MonoBehaviour {
 
             Q[pos] = asd;
 
+            //Para cada um dos vizinhos 'v' do vértice atual:
             foreach (Vertex.neighbor v in pivo.obj.GetComponent<Vertex>().neighbors)
             {
+                //Caso ele não tenha sido removido:
                 if(Q.Find(p => p.obj == v.obj).isRemoved == false)
                 {
+                    //Atualiza a distância de 'v' caso seja menor que a distância já presente nele:
                     int alt = Q.Find(p => p.obj == pivo.obj).valor + v.valor;
                     if (alt < Q.Find(p => p.obj == v.obj).valor)
                     {
@@ -192,6 +229,8 @@ public class Dijkstra : MonoBehaviour {
                         aux.valor = alt;
                         aux.prev = pivo.obj;
                         Q[index] = aux;
+
+                        print("mudei o vertice " + v.obj.name + " para o valor " + Q[index].valor);
                     }
                 }
             }

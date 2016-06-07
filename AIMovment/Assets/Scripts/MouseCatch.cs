@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class MouseCatch : MonoBehaviour {
 
@@ -37,6 +38,7 @@ public class MouseCatch : MonoBehaviour {
         input.transform.localScale = new Vector3(1, 1, 1);
         input.transform.localPosition = new Vector3(0, 0, 0);
         input.GetComponent<InputField>().onEndEdit = submitEvent;
+        EventSystem.current.SetSelectedGameObject(input);
     }
 
     public void createPath(int valor)

@@ -15,7 +15,7 @@ public class PlayerStatus : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        life = 40;
+        life = 100;
         Imlate = false;
 	}
 

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
-using System.Collections.Generic;
+using UnityEngine.UI;using System.Collections.Generic;
 
 public class Dijkstra : MonoBehaviour {
 
@@ -134,7 +133,6 @@ public class Dijkstra : MonoBehaviour {
 
         string frase = "";
 
-        GetComponent<DecisionTree>().executeTree();
         path = doADijkstraLoop();
         if (path != null)
         {
@@ -228,9 +226,11 @@ public class Dijkstra : MonoBehaviour {
             asd.isRemoved = true;
 
             pivo.obj.GetComponent<SpriteRenderer>().color = Color.yellow;
+            player.GetComponent<PlayerStatus>().onVertex = pivo.obj;
+            GetComponent<DecisionTree>().executeTree();
 
-                //Se for o finalVertex:
-                if (pivo.obj == finalVertex)
+            //Se for o finalVertex:
+            if (pivo.obj == finalVertex)
             {
                 //Retorna o caminho de vertices:
                 dist aux = pivo;

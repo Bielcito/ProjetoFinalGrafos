@@ -30,9 +30,18 @@ public class DecisionTree : MonoBehaviour {
 
 	public void executeTree()
 	{
-		vertex = player.GetComponent<PlayerStatus> ().onVertex;
+		vertex = player.GetComponent<PlayerStatus>().onVertex;
 
-		if (player.GetComponent<PlayerStatus> ().life < 30) 
+        if (vertex.GetComponent<Vertex>().isHaveMonster)
+        {
+            player.GetComponent<PlayerStatus>().life -= 40;
+        }
+        if (vertex.GetComponent<Vertex>().isHaveCoin)
+        {
+            player.GetComponent<PlayerStatus>().score += 10;
+        }
+
+        if (player.GetComponent<PlayerStatus>().life < 30) 
 		{
             Vertex.neighbor x;
             for (int i = 0; i < vertex.GetComponent<Vertex>().neighbors.Count; i++)

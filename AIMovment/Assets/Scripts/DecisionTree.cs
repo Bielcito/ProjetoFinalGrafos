@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class DecisionTree : MonoBehaviour {
 
@@ -54,13 +55,27 @@ public class DecisionTree : MonoBehaviour {
 			} 
 			else 
 			{
-                print("entrou aqui!");
+                bool att = false;
                 Vertex.neighbor x;
+                List<int> notcoinsindexes = new List<int>();
                 for (int i = 0; i < vertex.GetComponent<Vertex>().neighbors.Count; i++)
                 {
                     x = vertex.GetComponent<Vertex>().neighbors[i];
                     if (x.obj.GetComponent<Vertex>().isHaveCoin == true)
                     {
+                        att = true;
+                    }
+                    else
+                    {
+                        notcoinsindexes.Add(i);
+                    }
+                }
+                if(att)
+                {
+                    print("HEHEHEHE");
+                    foreach(int i in notcoinsindexes)
+                    {
+                        x = vertex.GetComponent<Vertex>().neighbors[i];
                         Vertex.neighbor aux;
                         aux.obj = x.obj;
                         aux.valor = x.valor + 5;

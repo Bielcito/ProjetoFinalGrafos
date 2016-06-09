@@ -13,6 +13,7 @@ public class Dijkstra : MonoBehaviour {
     public bool isButtonInitialPressed = false;
     public bool isButtonFinalPressed = false;
     public bool isDijkstraAlreadyInitialized = false;
+    List<GameObject> path;
     public struct dist
     {
         public GameObject obj;
@@ -98,6 +99,22 @@ public class Dijkstra : MonoBehaviour {
         }
     }
 
+    public void movePlayer()
+    {
+        StartCoroutine(movePlayerCoRoutine());
+    }
+
+    IEnumerator movePlayerCoRoutine()
+    {
+        GameObject x;
+        for (int i = path.Count -1; i >= 0; i--)
+        {
+            x = path[i];
+            player.GetComponent<PlayerStatus>().startChangeVertex(x);
+            yield return new WaitForSeconds(2);
+        }
+    }
+
     public void printDijkstraPath()
     {
         if(!isDijkstraAlreadyInitialized)
@@ -118,7 +135,7 @@ public class Dijkstra : MonoBehaviour {
         string frase = "";
 
         GetComponent<DecisionTree>().executeTree();
-        List<GameObject> path = doADijkstraLoop();
+        path = doADijkstraLoop();
         if (path != null)
         {
             foreach (GameObject x in path)
@@ -126,6 +143,7 @@ public class Dijkstra : MonoBehaviour {
                 frase += x.name + " ";
             }
             print(frase);
+            movePlayer();
         }
     }
 

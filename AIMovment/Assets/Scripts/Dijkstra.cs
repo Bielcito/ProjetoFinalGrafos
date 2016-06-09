@@ -5,9 +5,11 @@ using System.Collections.Generic;
 
 public class Dijkstra : MonoBehaviour {
 
+    public GameObject player;
     public GameObject initialVertex = null;
     public GameObject finalVertex = null;
     public GameObject textobj;
+    public dist pivo;
     public bool isButtonInitialPressed = false;
     public bool isButtonFinalPressed = false;
     public bool isDijkstraAlreadyInitialized = false;
@@ -24,6 +26,7 @@ public class Dijkstra : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        player = GameObject.Find("Player");
     }
 	
 	// Update is called once per frame
@@ -114,6 +117,7 @@ public class Dijkstra : MonoBehaviour {
 
         string frase = "";
 
+        GetComponent<DecisionTree>().executeTree();
         List<GameObject> path = doADijkstraLoop();
         if (path != null)
         {
@@ -169,6 +173,22 @@ public class Dijkstra : MonoBehaviour {
     {
         if (Q.FindAll(p => p.isRemoved).Count != Q.Count)
         {
+            if(pivo.obj)
+            {
+                if(pivo.obj == initialVertex)
+                {
+                    pivo.obj.GetComponent<SpriteRenderer>().color = Color.green;
+                }
+                else if(pivo.obj == finalVertex)
+                {
+                    pivo.obj.GetComponent<SpriteRenderer>().color = Color.red;
+                }
+                else
+                {
+                    pivo.obj.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+            }
+
             //Pega o vértice com a menor distância em Q:
             dist min = new dist();
             int pos = 0;
@@ -185,12 +205,14 @@ public class Dijkstra : MonoBehaviour {
                     pos = Q.FindIndex(a => a.obj == u.obj);
                 }
             }
-            dist pivo = Q[pos];
+            pivo = Q[pos];
             dist asd = Q[pos];
             asd.isRemoved = true;
 
-            //Se for o finalVertex:
-            if(pivo.obj == finalVertex)
+            pivo.obj.GetComponent<SpriteRenderer>().color = Color.yellow;
+
+                //Se for o finalVertex:
+                if (pivo.obj == finalVertex)
             {
                 //Retorna o caminho de vertices:
                 dist aux = pivo;

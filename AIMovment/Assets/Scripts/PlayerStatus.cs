@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerStatus : MonoBehaviour {
 
 	public int life;
-	public bool Imlate;
+    public bool Imlate;
 	public GameObject onVertex;
 	public int score;
 
@@ -15,15 +15,16 @@ public class PlayerStatus : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        //startChangeVertex(GameObject.Find("3"));
+        life = 40;
+        Imlate = false;
 	}
 
-    void startChangeVertex(GameObject obj)
+    public void startChangeVertex(GameObject obj)
     {
+        onVertex = obj;
         contador = 100;
         toVertex = obj;
         initialDistance = (toVertex.transform.position - transform.position) / 100;
-        print(initialDistance);
     }
 	
 	// Update is called once per frame

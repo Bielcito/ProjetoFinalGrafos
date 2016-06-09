@@ -1,13 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
 public class Vertex : MonoBehaviour {
 
     public Vector3 position;
-    public bool monster;
-    public bool coin;
+    public bool isHaveMonster;
+    public bool isHaveCoin;
     public GameObject textobj;
+    public GameObject monster;
+    public GameObject coin;
 
     //Um dos Vizinhos de mim:
     public struct neighbor
@@ -17,13 +21,13 @@ public class Vertex : MonoBehaviour {
     }
 
     //Lista dos meus vizinhos
-    public ArrayList neighbors;
+    public List<neighbor> neighbors;
     public GameObject PathCreator;
 
     // Pega a posição inicial do objeto ao qual o scrip está acoplado e salva em position:
     void Start () {
         PathCreator = GameObject.Find("PathCreator");
-        neighbors = new ArrayList();
+        neighbors = new List<neighbor>();
         printIndexes();
         refreshValorPosition();
     }
@@ -31,6 +35,18 @@ public class Vertex : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         position = gameObject.transform.position;
+    }
+
+    public void AddMonster()
+    {
+        if(!monster)
+        {
+            GameObject aux = Resources.Load("Enemy", typeof(GameObject)) as GameObject;
+            monster = GameObject.Instantiate(aux);
+            monster.transform.SetParent(GameObject.Find("Players").transform);
+            monster.transform.position = transform.position;
+            monster.transform.localScale = new Vector3(13.5604f, 13.5604f, 13.5604f);
+        }
     }
 
     void printIndexes()
@@ -62,17 +78,59 @@ public class Vertex : MonoBehaviour {
         {
             return;
         }
-        if(PathCreator.GetComponent<Dijkstra>().isButtonInitialPressed != true && PathCreator.GetComponent<Dijkstra>().isButtonFinalPressed != true)
+        if (PathCreator.GetComponent<Dijkstra>().isButtonInitialPressed == true)
+        {
+            PathCreator.GetComponent<Dijkstra>().selectInitialVertex(gameObject);
+            GameObject.Find("Player").GetComponent<PlayerStatus>().startChangeVertex(gameObject);
+            GameObject.Find("Player").GetComponent<PlayerStatus>().onVertex = gameObject;
+        }
+        else if (PathCreator.GetComponent<Dijkstra>().isButtonFinalPressed == true)
+        {
+            PathCreator.GetComponent<Dijkstra>().selectFinalVertex(gameObject);
+        }
+        else if (PathCreator.GetComponent<DecisionTree>().isAddMonsterButtonClicked == true)
+        {
+            if(isHaveMonster)
+            {
+                isHaveMonster = false;
+            }
+            else
+            {
+                isHaveMonster = true;
+                AddMonster();
+            }
+
+            PathCreator.GetComponent<DecisionTree>().isAddMonsterButtonClicked = false;
+        }
+        else if (PathCreator.GetComponent<DecisionTree>().isAddCoinButtonClicked == true)
+        {
+            if (isHaveCoin)
+            {
+                isHaveCoin = false;
+            }
+            else
+            {
+                isHaveCoin = true;
+                AddCoin();
+            }
+
+            PathCreator.GetComponent<DecisionTree>().isAddCoinButtonClicked = false;
+        }
+        else
         {
             PathCreator.GetComponent<MouseCatch>().PassObject(gameObject);
         }
-        else if(PathCreator.GetComponent<Dijkstra>().isButtonInitialPressed == true)
+    }
+
+    public void AddCoin()
+    {
+        if(!coin)
         {
-            PathCreator.GetComponent<Dijkstra>().selectInitialVertex(gameObject);
-        }
-        else if(PathCreator.GetComponent<Dijkstra>().isButtonFinalPressed == true)
-        {
-            PathCreator.GetComponent<Dijkstra>().selectFinalVertex(gameObject);
+            GameObject aux = Resources.Load("Hearth", typeof(GameObject)) as GameObject;
+            coin = GameObject.Instantiate(aux);
+            coin.transform.SetParent(GameObject.Find("Players").transform);
+            coin.transform.position = transform.position;
+            coin.transform.localScale = new Vector3(4.82644f, 4.82644f, 0);
         }
     }
 

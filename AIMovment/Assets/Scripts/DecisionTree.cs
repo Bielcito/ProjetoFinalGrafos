@@ -5,57 +5,67 @@ public class DecisionTree : MonoBehaviour {
 
 	public GameObject vertex;
 	public GameObject player;
+    public bool isAddMonsterButtonClicked = false;
+    public bool isAddCoinButtonClicked = false;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
+    // Use this for initialization
+    void Start () {
+        player = GameObject.Find("Player");
+    }
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 
-	void executeTree()
+    public void AddMonsterButtonClicked()
+    {
+        isAddMonsterButtonClicked = true;
+    }
+
+    public void AddCoinButtonClicked()
+    {
+        isAddCoinButtonClicked = true;
+    }
+
+	public void executeTree()
 	{
-		player = GameObject.Find("Player");
 		vertex = player.GetComponent<PlayerStatus> ().onVertex;
 
-		if (player.GetComponent<PlayerStatus> ().life < 100*0.3f) 
+		if (player.GetComponent<PlayerStatus> ().life < 30) 
 		{
-            int i = 0;
-			foreach (Vertex.neighbor x in vertex.GetComponent<Vertex>().neighbors) 
-			{
-				if (x.obj.GetComponent<Vertex>().monster) 
-				{
+            Vertex.neighbor x;
+            for (int i = 0; i < vertex.GetComponent<Vertex>().neighbors.Count; i++)
+            {
+                x = vertex.GetComponent<Vertex>().neighbors[i];
+                if(x.obj.GetComponent<Vertex>().isHaveMonster == true)
+                {
                     Vertex.neighbor aux;
                     aux.obj = x.obj;
                     aux.valor = x.valor + 5;
                     vertex.GetComponent<Vertex>().neighbors[i] = aux;
-				}
-                i += 1;
-			}
+                }
+            }
 		}
-
 		else 
 		{
-			if (player.GetComponent<PlayerStatus> ().Imlate) 
+			if (player.GetComponent<PlayerStatus>().Imlate) 
 			{
 				//do nothing
 			} 
 			else 
 			{
-                int i = 0;
-                foreach (Vertex.neighbor x in vertex.GetComponent<Vertex>().neighbors)
+                print("entrou aqui!");
+                Vertex.neighbor x;
+                for (int i = 0; i < vertex.GetComponent<Vertex>().neighbors.Count; i++)
                 {
-                    if (x.obj.GetComponent<Vertex>().coin)
+                    x = vertex.GetComponent<Vertex>().neighbors[i];
+                    if (x.obj.GetComponent<Vertex>().isHaveCoin == true)
                     {
                         Vertex.neighbor aux;
                         aux.obj = x.obj;
                         aux.valor = x.valor + 5;
                         vertex.GetComponent<Vertex>().neighbors[i] = aux;
                     }
-                    i += 1;
                 }
             }
 		}

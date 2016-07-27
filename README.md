@@ -15,7 +15,12 @@ O personagem evitará monstros quando estiver com menos de 30% da vida, se esta 
 dado o personagem aumentará o peso de caminhos que levam para monstros em 5 pontos.
 O personagem também dará prioridades para moedas, aumentando o peso de todos os caminhos vizinhos que não possuem moedas em 5 pontos.
 
-Ao clicar em "Executar", será mostrado com o uso de cores quais por quais vértices e por quais arestas o personagem passou,
-no console são imprimidos os testes que foram realizados, e ao final do processo é indicado o caminho que o personagem deve seguir para
+Ao clicar em "Executar", será mostrado com o uso de cores quais vértices e quais arestas foram testadas, e
+no console são imprimidos os testes que foram realizados. Qo final do processo é indicado o caminho que o personagem deve seguir para
 realizar o menor caminho entre os pontos inicial e final de forma que ele evite monstros quando estiver com vida baixa, 
 e pegando o máximo de moedas que puder.
+
+Para iniciar o projeto você deve ter o Unity 5 instalado em seu computador, e apertar no botão "Start" assim que abrir o projeto.
+Quaisquer dúvidas, contactar-me no email: oliveira.grdo@gmail.com
+
+Abraço.
